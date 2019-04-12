@@ -68,6 +68,7 @@ public class DemoRenderer extends AbstractBitmapRenderer {
         GLES20.glViewport(0, 0, width, height);
         float ratio = (float) width / height;
         Matrix.frustumM(projMatrix, 0, -1, 1, -1, 1, 3, 7);//投影矩阵设置
+        //坐标轴和数学的一样，y为上，x为右，z为屏幕正向外
         Matrix.setLookAtM(viewMatrix, 0, 0, 0, -3, 0, 0, 0, 0.0f, 1.0f, 0.0f);
         Matrix.setIdentityM(mViewPjMatrix, 0);
         Matrix.multiplyMM(mViewPjMatrix, 0, viewMatrix,0, mViewPjMatrix, 0);
