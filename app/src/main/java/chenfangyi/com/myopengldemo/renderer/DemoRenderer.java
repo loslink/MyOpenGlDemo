@@ -26,7 +26,7 @@ import chenfangyi.com.myopengldemo.texture.ImageTexture;
 public class DemoRenderer extends AbstractBitmapRenderer {
 
     public static float[] projMatrix = new float[16];// 投影
-    public static float[] viewMatrix = new float[16];// 相机
+    public static float[] cameraMatrix = new float[16];// 相机
     public static float[] mViewPjMatrix = new float[16];// 总变换矩阵
     public static float[] matrixs = new float[16];
     Context mContext;
@@ -67,11 +67,25 @@ public class DemoRenderer extends AbstractBitmapRenderer {
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         GLES20.glViewport(0, 0, width, height);
         float ratio = (float) width / height;
-        Matrix.frustumM(projMatrix, 0, -1, 1, -1, 1, 3, 7);//投影矩阵设置
         //坐标轴和数学的一样，y为上，x为右，z为屏幕正向外
-        Matrix.setLookAtM(viewMatrix, 0, 0, 0, -3, 0, 0, 0, 0.0f, 1.0f, 0.0f);
+        //Matrix.frustumM 截锥体
+        //left、right、bottom、top是近截面的离截面中心点的坐标，near：近截面的距离，far远截面距离一般比较大要容纳整个物体（即在物体后面之后）
+        Matrix.frustumM(projMatrix, 0, -1, 1, -1, 1, 3, 7);//投影矩阵设置
+
+//https://blog.csdn.net/jamesshaoya/article/details/54342241
+//        setLookAtM 参数（设置摄像机位置）
+//        float cx, //摄像机位置x
+//        float cy, //摄像机位置y
+//        float cz, //摄像机位置z
+//        float tx, //摄像机目标点x
+//        float ty, //摄像机目标点y
+//        float tz, //摄像机目标点z
+//        float upx, //摄像机UP向量X分量 三个参数决定相机的顶部方向，决定相机摆放姿势
+//        float upy, //摄像机UP向量Y分量
+//        float upz //摄像机UP向量Z分量
+        Matrix.setLookAtM(cameraMatrix, 0, 0, 0, -3, 0, 0, 0, 0.0f, 1.0f, 0.0f);
         Matrix.setIdentityM(mViewPjMatrix, 0);
-        Matrix.multiplyMM(mViewPjMatrix, 0, viewMatrix,0, mViewPjMatrix, 0);
+        Matrix.multiplyMM(mViewPjMatrix, 0, cameraMatrix,0, mViewPjMatrix, 0);
         Matrix.multiplyMM(mViewPjMatrix, 0, projMatrix,0, mViewPjMatrix, 0);
         mImageTexture.onDisplaySizeChanged(width, height);
     }

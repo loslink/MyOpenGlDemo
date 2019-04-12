@@ -34,13 +34,13 @@ public class ImageTexture implements ITexture {
             " \n" +
             "void main()\n" +
             "{\n" +
-            "    gl_Position = position * uMVPMatrix;\n" +//顶点坐标
-            "    textureCoordinate = inputTextureCoordinate.xy;\n" +//纹理坐标
+            "    gl_Position = position * uMVPMatrix;\n" +//顶点坐标,像素点通过矩阵转换后在屏幕上的位置
+            "    textureCoordinate = inputTextureCoordinate.xy;\n" +//纹理坐标，每个像素点
             "}";
     public static final String NO_FILTER_FRAGMENT_SHADER = "" +
             "varying highp vec2 textureCoordinate;\n" +
             " \n" +
-            "uniform sampler2D inputImageTexture;\n" +
+            "uniform sampler2D inputImageTexture;\n" +//inputImageTexture 纹理资源
             " \n" +
             "void main()\n" +
             "{\n" +

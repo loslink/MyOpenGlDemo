@@ -211,6 +211,7 @@ public class CircleTexture implements ITexture {
         mNormalBuffer = ByteBuffer.allocateDirect(vertexs.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
         mNormalBuffer.put(vertexs).position(0);
 
+        //ByteOrder.nativeOrder()返回本地jvm运行的硬件的字节顺序.使用和硬件一致的字节顺序可能使buffer更加有效.
         mLightBuffer = ByteBuffer.allocateDirect(vertexs.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
         float light[] = new float[]{
                 1f, 0.5f, 1.5f
