@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="chenfangyi.com.myopengldemo.MainActivity">
+
+    <chenfangyi.com.myopengldemo.view.CircleGLSurfaceView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/gl_view"/>
+
+    <TextView
+        android:id="@+id/rotate_bt"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:shadowColor="#000000"
+        android:shadowRadius="2"
+        android:layout_gravity="bottom|left"
+        android:layout_marginBottom="50dp"/>
+
+    <TextView
+        android:id="@+id/flipH_bt"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:shadowColor="#000000"
+        android:shadowRadius="2"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="50dp"/>
+
+    <TextView
+        android:id="@+id/flipV_bt"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:shadowColor="#000000"
+        android:shadowRadius="2"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="50dp"/>
+</FrameLayout>

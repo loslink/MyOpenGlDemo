@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">MyOpenGlDemo</string>
+
+    <string name="flipH_value">水平翻转: %1$s</string>
+    <string name="flipV_value">竖直翻转: %1$s</string>
+    <string name="rotate_value">旋转角度: %1$d</string>
+</resources>
