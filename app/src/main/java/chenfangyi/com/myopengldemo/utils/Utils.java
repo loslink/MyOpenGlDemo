@@ -142,7 +142,7 @@ public class Utils {
         float[] buffer = new float[8];
         System.arraycopy(TEXTURE_COORD_ABCD, 0, buffer, 0, TEXTURE_COORD_ABCD.length);
 
-        if(rotation == 90){//d -> a  &  c -> d  &  b -> c  &  a -> b
+        if(rotation == 90){//d -> a（d替换为a）  &  c -> d  &  b -> c  &  a -> b
             replace(buffer, B_INDEX, C_INDEX, D_INDEX, A_INDEX);
         } else if(rotation == 180){//d <-> b  &  c <-> a
             swap(buffer, A_INDEX, C_INDEX);
@@ -229,7 +229,7 @@ public class Utils {
      * aReplaceIndex 替换 A_INDEX
      * bReplaceIndex 替换 B_INDEX
      * cReplaceIndex 替换 C_INDEX
-     * dReplaceIndex 替换 D_INDEX
+     * dReplaceIndex 替换 D_INDEX（被替换的位置）
      * @param array
      * @param aReplaceIndex
      * @param bReplaceIndex

@@ -107,7 +107,7 @@ public class ImageTexture implements ITexture {
     }
 
     @Override
-    public void onInit() {//初始化各种句柄
+    public void onInit() {//初始化各种句柄，为了之后赋值
         mProgram = OpenGlUtils.loadProgram(mVertexShader, mFragmentShader);//链接程序
         mMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
         mPositionHandle = GLES20.glGetAttribLocation(mProgram, "position");
@@ -162,27 +162,29 @@ public class ImageTexture implements ITexture {
 //        drawToFrameBuffer(mvpMatrix);
         GLES20.glViewport(0, 0, mDisplayWidth, mDisplayHeight);
 //        GLES20.glViewport((int)mShowRectF.left, (int)mShowRectF.top, (int)mShowRectF.width(), (int)mShowRectF.height());
+        //以下设置混合模式
         GLES20.glEnable(GLES20.GL_BLEND);
-        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);//混合叠加
         GLES20.glUseProgram(mProgram);
 
         GLES20.glUniformMatrix4fv(mMatrixHandle, 1, false, mvpMatrix, 0);
 
-        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mImageTextureId);
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);//激活纹理单元0
+        //mImageTextureId 为相当于加载纹理对象到内存中后的引用
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mImageTextureId);//绑定纹理为2D纹理
         GLES20.glUniform1i(mTextureHandle, 0);//绑定纹理 由于是GL_TEXTURE0所以绑定到0上
 
-        mVertexBuffer.position(0);
-        GLES20.glEnableVertexAttribArray(mPositionHandle);
-        GLES20.glVertexAttribPointer(mPositionHandle, 2, GLES20.GL_FLOAT, false, 2 * 4, mVertexBuffer);
+        mVertexBuffer.position(0);//顶点回归初始位置
+        GLES20.glEnableVertexAttribArray(mPositionHandle);//激活句柄
+        GLES20.glVertexAttribPointer(mPositionHandle, 2, GLES20.GL_FLOAT, false, 2 * 4, mVertexBuffer);//为句柄赋值，stride:每次读取的字节长度
 
         mTextureBuffer.position(0);
         GLES20.glEnableVertexAttribArray(mTextureCoordHandle);
-        GLES20.glVertexAttribPointer(mTextureCoordHandle, 2, GLES20.GL_FLOAT, false, 2 * 4, mTextureBuffer);
+        GLES20.glVertexAttribPointer(mTextureCoordHandle, 2, GLES20.GL_FLOAT, false, 2 * 4, mTextureBuffer);//纹理坐标赋值
 
         onPreDraw();
 
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);//真正绘画，count：顶点数量四个顶点
 
 
 //        mBitmapBuffer.clear();
@@ -203,11 +205,15 @@ public class ImageTexture implements ITexture {
 
     }
 
+    /**
+     * 把当前画面写到FrameBuffer中，再转成bitmap
+     * @param mvpMatrix
+     */
     @Override
     public void drawToFrameBuffer(float[] mvpMatrix) {
         if(mImageTextureId == OpenGlUtils.NO_TEXTURE) return;
         GLES20.glViewport(0, 0, mFrameBufferRotationTextureWidth, mFrameBufferRotationTextureHeight);
-        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, mFrameBuffers[0]);
+        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, mFrameBuffers[0]);//使用自定义帧缓冲对象
         //这里需要注意， 要先GLES20.glClearColor， 然后在glClear GLES20.GL_COLOR_BUFFER_BIT才会使清除的颜色生效
         //glBindFramebuffer后执行这两句代码，作用的范围就是FrameBuffer，frameBuffer宽高有多大作用范围就有多大
         //后面绘制纹理则不是按照FrameBuffer的大小绘制的，而已按照GLSurfaceView的大小（也就是GL的环境）绘制的
@@ -244,7 +250,7 @@ public class ImageTexture implements ITexture {
         //这里需要注意一点， 如果在glReadPixels之前将frameBuffer绑定到了0, 则读取的Pixel不是FramBuffer的, 而是绘制到屏幕的， 这种情况下如果读取的大小大过GLSurfaceView的大小，则大于的部分是透明的
         GLES20.glReadPixels(mReadPixelRect.left, mReadPixelRect.top, mReadPixelRect.width(), mReadPixelRect.height(), GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, mBitmapBuffer);
         mBitmapBuffer.position(0);
-        mBufferBitmap.copyPixelsFromBuffer(mBitmapBuffer);
+        mBufferBitmap.copyPixelsFromBuffer(mBitmapBuffer);//buffer转成bitmap
 
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
         GLES20.glDisableVertexAttribArray(mPositionHandle);
