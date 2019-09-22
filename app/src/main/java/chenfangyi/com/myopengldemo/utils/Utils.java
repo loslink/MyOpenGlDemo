@@ -139,11 +139,11 @@ public class Utils {
     public static float[] getTextureCoord(boolean flipH, boolean flipV, int rotation, VERTEX_MODE mode){
         float[] result = new float[8];
         rotation = (rotation % 360 + 360) % 360;//保证是正的
-        float[] buffer = new float[8];
+        float[] buffer = new float[8];//使用副本
         System.arraycopy(TEXTURE_COORD_ABCD, 0, buffer, 0, TEXTURE_COORD_ABCD.length);
 
-        if(rotation == 90){//d -> a（d替换为a）  &  c -> d  &  b -> c  &  a -> b
-            replace(buffer, B_INDEX, C_INDEX, D_INDEX, A_INDEX);
+        if(rotation == 90){//d -> a（d被替换为a）  &  c -> d  &  b -> c  &  a -> b
+            replace(buffer, B_INDEX, C_INDEX, D_INDEX, A_INDEX);//这几个值为替换者，参数名为被替换者
         } else if(rotation == 180){//d <-> b  &  c <-> a
             swap(buffer, A_INDEX, C_INDEX);
             swap(buffer, B_INDEX, D_INDEX);
@@ -229,7 +229,7 @@ public class Utils {
      * aReplaceIndex 替换 A_INDEX
      * bReplaceIndex 替换 B_INDEX
      * cReplaceIndex 替换 C_INDEX
-     * dReplaceIndex 替换 D_INDEX（被替换的位置）
+     * dReplaceIndex 替换 D_INDEX（dReplaceIndex为被替换的位置）
      * @param array
      * @param aReplaceIndex
      * @param bReplaceIndex

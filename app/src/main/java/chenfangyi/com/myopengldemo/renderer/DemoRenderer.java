@@ -90,14 +90,23 @@ public class DemoRenderer extends AbstractBitmapRenderer {
         mImageTexture.onDisplaySizeChanged(width, height);
     }
 
+    /**
+     * gl回调绘制
+     * @param gl
+     */
     @Override
     public void onDrawFrame(GL10 gl) {
-        runPreDrawTask();
+        runPreDrawTask();//绘制前任务
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
-        mImageTexture.draw(mViewPjMatrix);
-        runAfterDrawTask();
+        mImageTexture.draw(mViewPjMatrix);//执行绘制任务
+        runAfterDrawTask();//绘制后任务
     }
 
+    /**
+     * 设置图片资源任务
+     * @param bitmap
+     * @param isRecycle
+     */
     public void setImageBitmap(final Bitmap bitmap, final boolean isRecycle){
         if (bitmap == null || bitmap.isRecycled()) {
             return;
@@ -112,7 +121,7 @@ public class DemoRenderer extends AbstractBitmapRenderer {
                     boolean hasAddPaddingX = false;
                     boolean hasAddPaddingY = false;
                     Bitmap resizedBitmap = null;
-                    if (bitmap.getWidth() % 2 == 1) {//奇数宽度的时候需要做这个处理， 原因是因为某些机型如果存在奇数宽度生成纹理后绘制出来完全不正确
+                    if (bitmap.getWidth() % 2 == 1) {//奇数宽度 的时候需要做这个处理， 原因是因为某些机型如果存在奇数宽度生成纹理后绘制出来完全不正确
                         hasAddPaddingX = true;
                     }
 
@@ -120,7 +129,7 @@ public class DemoRenderer extends AbstractBitmapRenderer {
                         hasAddPaddingY = true;
                     }
 
-                    if(hasAddPaddingX || hasAddPaddingY){
+                    if(hasAddPaddingX || hasAddPaddingY){//需要把奇数长度转成偶数
                         resizedBitmap = Bitmap.createBitmap(bitmap.getWidth() + (hasAddPaddingX ? ADD_SIZE : 0), bitmap.getHeight() + (hasAddPaddingY ? ADD_SIZE : 0), Bitmap.Config.ARGB_8888);
                         Canvas can = new Canvas(resizedBitmap);
                         can.drawColor(Color.GREEN);

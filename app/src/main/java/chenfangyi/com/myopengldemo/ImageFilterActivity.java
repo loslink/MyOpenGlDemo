@@ -77,8 +77,8 @@ public class ImageFilterActivity extends AppCompatActivity {
                     mGLSurfaceView.requestRender();
                 } else if(v == mFlipHBt){
                     mFlipH = !mFlipH;
-                    mRenderer.setFlip(mFlipH, mFlipV);
-                    mGLSurfaceView.requestRender();
+                    mRenderer.setFlip(mFlipH, mFlipV);//设置里面参数缓冲区
+                    mGLSurfaceView.requestRender();//触发调用drawframe回调
                 } else if(v == mFlipVBt){
                     mFlipV = !mFlipV;
                     mRenderer.setFlip(mFlipH, mFlipV);

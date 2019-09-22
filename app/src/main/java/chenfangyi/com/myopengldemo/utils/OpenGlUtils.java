@@ -52,7 +52,7 @@ public class OpenGlUtils {
             return NO_TEXTURE;
         } else {
             int textures[] = new int[1];
-            if (usedTexId == NO_TEXTURE) {
+            if (usedTexId == NO_TEXTURE) {//没有纹理则创建一个纹理
                 GLES20.glGenTextures(1, textures, 0);
                 GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[0]);
                 GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
@@ -65,7 +65,7 @@ public class OpenGlUtils {
                         GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
 
                 GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, img, 0);
-            } else {
+            } else {//已经有纹理了，就从新绑定新图片
                 GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, usedTexId);
                 GLUtils.texSubImage2D(GLES20.GL_TEXTURE_2D, 0, 0, 0, img);
                 textures[0] = usedTexId;

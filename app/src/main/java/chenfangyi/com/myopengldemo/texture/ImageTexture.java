@@ -48,7 +48,7 @@ public class ImageTexture implements ITexture {
             "}";
 
     protected static final Utils.VERTEX_MODE mMode = Utils.VERTEX_MODE.DCAB;
-    public static final float VERTEX_COORD[] = Utils.getVertexCoord(mMode);
+    public static final float VERTEX_COORD[] = Utils.getVertexCoord(mMode);//根据不同顶点顺序获取顶点坐标数组
 
     protected static final float TEXTURE_COORD[] = Utils.getTextureCoord(false, false, 0, mMode);
 
@@ -82,8 +82,8 @@ public class ImageTexture implements ITexture {
     protected Bitmap mBufferBitmap;
     protected Rect mReadPixelRect;
 //    protected RectF mActionRect;
-    protected FloatBuffer mFrameBufferVertexBuffer;//顶点坐标
-    protected FloatBuffer mFrameBufferTextureBuffer;//纹理坐标
+    protected FloatBuffer mFrameBufferVertexBuffer;//顶点坐标缓冲区
+    protected FloatBuffer mFrameBufferTextureBuffer;//纹理坐标缓冲区
     protected int mFrameBufferRotationTextureWidth;
     protected int mFrameBufferRotationTextureHeight;
 
@@ -289,12 +289,13 @@ public class ImageTexture implements ITexture {
     }
 
     /**
+     * 从新计算顶点缓冲区，供新变换使用
      * 通过更改顶点坐标实现
      */
     public void recountVertexBuffer(){
         int rotationTW = mTextureWidth;
         int rotationTH = mTextureHeight;
-        if(mRotation == 90 || mRotation == 270){
+        if(mRotation == 90 || mRotation == 270){//这个旋转角度导致宽高调转
             int cache = rotationTW;
             rotationTW = rotationTH;
             rotationTH = cache;
@@ -316,7 +317,7 @@ public class ImageTexture implements ITexture {
             float dx = (mDisplayWidth - newWidth) / 2;
             float dy = (mDisplayHeight - newHeight) / 2;
             mShowRectF.set(dx, dy, newWidth + dx, newHeight + dy);
-            vertex = Utils.getStandardVertex(mShowRectF, mDisplayWidth, mDisplayHeight, mMode);
+            vertex = Utils.getStandardVertex(mShowRectF, mDisplayWidth, mDisplayHeight, mMode);//mShowRectF为把图片按照比例缩放后的显示框，一般会超出屏幕
         } else if (mScaleType == ImageView.ScaleType.CENTER_INSIDE){//如果原图小不会进行拉伸
             float newWidth = rotationTW;
             float newHeight = rotationTH;
@@ -353,12 +354,12 @@ public class ImageTexture implements ITexture {
             vertex = Utils.getStandardVertex(mShowRectF, mDisplayWidth, mDisplayHeight, mMode);
         }
 
-        System.arraycopy(vertex, 0, VERTEX_COORD, 0, VERTEX_COORD.length);
+        System.arraycopy(vertex, 0, VERTEX_COORD, 0, VERTEX_COORD.length);//更新全局顶点坐标属性
         mVertexBuffer.clear();
-        mVertexBuffer.put(vertex);
+        mVertexBuffer.put(vertex);//更新顶点缓冲区（顶点坐标只处理裁剪区域计算）
         mVertexBuffer.position(0);
 
-        float textureCoord[] = Utils.getTextureCoord(mFilpH, mFlipV, mRotation, mMode);
+        float textureCoord[] = Utils.getTextureCoord(mFilpH, mFlipV, mRotation, mMode);//翻转和旋转只在纹理上处理
         System.arraycopy(textureCoord, 0, TEXTURE_COORD, 0, TEXTURE_COORD.length);
         mTextureBuffer.clear();
         mTextureBuffer.put(textureCoord);
