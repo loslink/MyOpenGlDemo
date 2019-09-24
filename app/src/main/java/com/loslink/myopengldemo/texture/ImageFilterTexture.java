@@ -1,5 +1,6 @@
 package com.loslink.myopengldemo.texture;
 
+import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
 
@@ -13,7 +14,7 @@ import com.loslink.myopengldemo.utils.OpenGlUtils;
 import com.loslink.myopengldemo.utils.Utils;
 
 /**
- * Created by chenfangyi on 17-5-12.
+ *
  * 绘制图片的类
  * 总结：
  * 顶点坐标控制绘制的范围
@@ -38,43 +39,7 @@ public class ImageFilterTexture extends ImageTexture {
             "    textureCoordinate2 = inputTextureCoordinate2.xy;\n" +
             "}";
 
-    public static final String LOOKUP_FRAGMENT_SHADER = "    precision mediump float;\n" +
-            "    varying highp vec2 textureCoordinate;\n" +
-            "    varying highp vec2 textureCoordinate2; // TODO: This is not used\n" +
-            "\n" +
-            "    uniform sampler2D inputImageTexture;\n" +
-            "    uniform sampler2D inputImageTexture2; // lookup texture\n" +
-            "    uniform lowp float intensity;\n" +
-            "    void main()\n" +
-            "    {\n" +
-            "        mediump vec4 textureColor = texture2D(inputImageTexture, textureCoordinate);\n" +
-            "\n" +
-            "        mediump float blueColor = textureColor.b * 63.0;\n" +
-            "\n" +
-            "        mediump vec2 quad1;\n" +
-            "        quad1.y = floor(floor(blueColor) / 8.0);\n" +
-            "        quad1.x = floor(blueColor) - (quad1.y * 8.0);\n" +
-            "\n" +
-            "        mediump vec2 quad2;\n" +
-            "        quad2.y = floor(ceil(blueColor) / 8.0);\n" +
-            "        quad2.x = ceil(blueColor) - (quad2.y * 8.0);\n" +
-            "        quad1 = clamp(quad1, vec2(0.0), vec2(7.0));\n" +
-            "        quad2 = clamp(quad2, vec2(0.0), vec2(7.0));\n" +
-            "\n" +
-            "        highp vec2 texPos1;\n" +
-            "        texPos1.x = (quad1.x * 0.125) + 0.5/512.0 + ((0.125 - 1.0/512.0) * textureColor.r);\n" +
-            "        texPos1.y = (quad1.y * 0.125) + 0.5/512.0 + ((0.125 - 1.0/512.0) * textureColor.g);\n" +
-            "\n" +
-            "        highp vec2 texPos2;\n" +
-            "        texPos2.x = (quad2.x * 0.125) + 0.5/512.0 + ((0.125 - 1.0/512.0) * textureColor.r);\n" +
-            "        texPos2.y = (quad2.y * 0.125) + 0.5/512.0 + ((0.125 - 1.0/512.0) * textureColor.g);\n" +
-            "\n" +
-            "        mediump vec4 newColor1 = texture2D(inputImageTexture2, texPos1);\n" +
-            "        mediump vec4 newColor2 = texture2D(inputImageTexture2, texPos2);\n" +
-            "\n" +
-            "        mediump vec4 newColor = mix(newColor1, newColor2, fract(blueColor));\n" +
-            "        gl_FragColor = mix(textureColor, vec4(newColor.rgb, textureColor.a), intensity);\n" +
-            "    }";
+    public static String LOOKUP_FRAGMENT_SHADER ;
 
     private int mFilterTextureCoordHandle;
     private int mFilterTextureHandle;
@@ -83,8 +48,9 @@ public class ImageFilterTexture extends ImageTexture {
     protected FloatBuffer mFilterTextureBuffer;//纹理坐标
     protected int mFilterTextureId = -1;
 
-    public ImageFilterTexture(){
-        super(VERTEX_SHADER, LOOKUP_FRAGMENT_SHADER);
+    public ImageFilterTexture(Context context){
+        super(VERTEX_SHADER, Utils.readTextFileFromResource(context,R.raw.lookup_fragment_shader));
+        LOOKUP_FRAGMENT_SHADER = Utils.readTextFileFromResource(context,R.raw.lookup_fragment_shader);
         mFilterTextureBuffer = ByteBuffer.allocateDirect(4 * 2 * 4)
                 .order(ByteOrder.nativeOrder())
                 .asFloatBuffer();

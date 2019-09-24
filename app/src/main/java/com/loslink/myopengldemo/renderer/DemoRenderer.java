@@ -48,7 +48,7 @@ public class DemoRenderer extends AbstractBitmapRenderer {
         mPreDrawTask = new LinkedList<>();
         mAfterDrawTask = new LinkedList<>();
         if(useFilter) {
-            mImageTexture = new ImageFilterTexture();
+            mImageTexture = new ImageFilterTexture(context);
         } else{
             mImageTexture = new ImageTexture();
         }

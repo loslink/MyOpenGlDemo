@@ -1,7 +1,13 @@
 package com.loslink.myopengldemo.utils;
 
+import android.content.Context;
 import android.graphics.Rect;
 import android.graphics.RectF;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 /**
  * Created by chenfangyi on 17-5-12.
@@ -379,5 +385,30 @@ public class Utils {
                 }
             }
         }
+    }
+
+    /**
+     * 读取着色器代码
+     * @param context 上下文
+     * @param resourceId 资源ID
+     * @return 代码字符串
+     */
+    public static String readTextFileFromResource(Context context, int resourceId){
+        StringBuilder sb = new StringBuilder();
+
+        try {
+            InputStream is = context.getResources().openRawResource(resourceId);
+            InputStreamReader inputStreamReader = new InputStreamReader(is);
+            BufferedReader br = new BufferedReader(inputStreamReader);
+            String nextLine;
+            while((nextLine = br.readLine())!=null){
+                sb.append(nextLine);
+                sb.append('\n');
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return sb.toString();
     }
 }
