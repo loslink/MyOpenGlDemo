@@ -32,4 +32,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    @OnClick(R.id.bt_3d_ball)
+    public void bt_3d_ball(){
+        Intent intent=new Intent(this,CircleActivity.class);
+        startActivity(intent);
+    }
+
 }
