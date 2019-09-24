@@ -14,11 +14,11 @@
         <!--<uses-feature android:glEsVersion="0x00020000" android:required="true" />-->
 
         <activity android:name="com.loslink.myopengldemo.MainActivity" android:label="Circle">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <activity android:name="com.loslink.myopengldemo.ImageActivity" android:label="Image">
@@ -30,11 +30,11 @@
         </activity>
 
         <activity android:name="com.loslink.myopengldemo.ImageFilterActivity"  android:label="ImageFilter">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
     </application>
 
