@@ -38,4 +38,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    @OnClick(R.id.bt_video)
+    public void bt_video(){
+        Intent intent=new Intent(this,VideoPreviewCropActivity.class);
+        startActivity(intent);
+    }
+
 }

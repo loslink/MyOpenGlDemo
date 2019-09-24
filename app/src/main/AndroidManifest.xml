@@ -4,7 +4,7 @@
 
     <application
         android:allowBackup="true"
-        android:name="com.loslink.myopengldemo.DemoApp"
+        android:name="com.loslink.myopengldemo.MyApp"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -27,6 +27,7 @@
         <activity android:name=".ImageFilterActivity" >
         </activity>
         <activity android:name=".CircleActivity" />
+        <activity android:name=".VideoPreviewCropActivity" />
     </application>
 
 </manifest>

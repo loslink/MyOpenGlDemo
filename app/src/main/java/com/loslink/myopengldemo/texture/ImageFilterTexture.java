@@ -8,7 +8,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-import com.loslink.myopengldemo.DemoApp;
+import com.loslink.myopengldemo.MyApp;
 import com.loslink.myopengldemo.R;
 import com.loslink.myopengldemo.utils.OpenGlUtils;
 import com.loslink.myopengldemo.utils.Utils;
@@ -51,7 +51,7 @@ public class ImageFilterTexture extends ImageTexture {
         mIntensityHandle = GLES20.glGetUniformLocation(mProgram, "intensity");//强度，混合强度
 
         //滤镜模版纹理
-        mFilterTextureId = OpenGlUtils.loadTexture(BitmapFactory.decodeResource(DemoApp.getApplication().getResources(), R.drawable.lookup_candy), OpenGlUtils.NO_TEXTURE, true);
+        mFilterTextureId = OpenGlUtils.loadTexture(BitmapFactory.decodeResource(MyApp.getApplication().getResources(), R.drawable.lookup_candy), OpenGlUtils.NO_TEXTURE, true);
     }
 
     @Override
