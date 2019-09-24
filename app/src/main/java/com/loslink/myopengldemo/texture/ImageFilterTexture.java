@@ -24,7 +24,6 @@ import com.loslink.myopengldemo.utils.Utils;
 
 public class ImageFilterTexture extends ImageTexture {
 //    protected static String VERTEX_SHADER ;
-//
 //    public static String LOOKUP_FRAGMENT_SHADER ;
 
     private int mFilterTextureCoordHandle;
@@ -48,9 +47,10 @@ public class ImageFilterTexture extends ImageTexture {
     public void onInit() {//初始化各种句柄
         super.onInit();
         mFilterTextureCoordHandle = GLES20.glGetAttribLocation(mProgram, "inputTextureCoordinate2");
-        mFilterTextureHandle = GLES20.glGetUniformLocation(mProgram, "inputImageTexture2");;
-        mIntensityHandle = GLES20.glGetUniformLocation(mProgram, "intensity");
+        mFilterTextureHandle = GLES20.glGetUniformLocation(mProgram, "inputImageTexture2");
+        mIntensityHandle = GLES20.glGetUniformLocation(mProgram, "intensity");//强度，混合强度
 
+        //滤镜模版纹理
         mFilterTextureId = OpenGlUtils.loadTexture(BitmapFactory.decodeResource(DemoApp.getApplication().getResources(), R.drawable.lookup_candy), OpenGlUtils.NO_TEXTURE, true);
     }
 

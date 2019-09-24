@@ -20,7 +20,7 @@ import com.loslink.myopengldemo.utils.OpenGlUtils;
 import com.loslink.myopengldemo.texture.ImageTexture;
 
 /**
- * Created by chenfangyi on 17-5-11.
+ * 负责渲染任务工作，监听GLSurfaceView 尺寸变化，任务到来，操作纹理 mImageTexture
  */
 
 public class DemoRenderer extends AbstractBitmapRenderer {
@@ -91,7 +91,7 @@ public class DemoRenderer extends AbstractBitmapRenderer {
     }
 
     /**
-     * gl回调绘制
+     * gl回调绘制，mGLSurfaceView.requestRender()就会执行
      * @param gl
      */
     @Override
