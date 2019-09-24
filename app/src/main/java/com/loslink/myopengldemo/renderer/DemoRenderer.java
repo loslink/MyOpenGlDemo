@@ -1,4 +1,4 @@
-package chenfangyi.com.myopengldemo.renderer;
+package com.loslink.myopengldemo.renderer;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -14,10 +14,10 @@ import java.util.Queue;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import chenfangyi.com.myopengldemo.texture.ImageFilterTexture;
-import chenfangyi.com.myopengldemo.utils.IConfigChangeListener;
-import chenfangyi.com.myopengldemo.utils.OpenGlUtils;
-import chenfangyi.com.myopengldemo.texture.ImageTexture;
+import com.loslink.myopengldemo.texture.ImageFilterTexture;
+import com.loslink.myopengldemo.utils.IConfigChangeListener;
+import com.loslink.myopengldemo.utils.OpenGlUtils;
+import com.loslink.myopengldemo.texture.ImageTexture;
 
 /**
  * Created by chenfangyi on 17-5-11.

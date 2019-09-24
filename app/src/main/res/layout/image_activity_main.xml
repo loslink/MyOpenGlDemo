@@ -3,9 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="chenfangyi.com.myopengldemo.MainActivity">
+    tools:context="com.loslink.myopengldemo.MainActivity">
 
-    <chenfangyi.com.myopengldemo.view.DemoGLSurfaceView
+    <com.loslink.myopengldemo.view.DemoGLSurfaceView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/gl_view"/>

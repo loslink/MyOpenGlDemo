@@ -1,4 +1,4 @@
-package chenfangyi.com.myopengldemo.view;
+package com.loslink.myopengldemo.view;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
@@ -6,7 +6,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
-import chenfangyi.com.myopengldemo.renderer.DemoRenderer;
+import com.loslink.myopengldemo.renderer.DemoRenderer;
 
 /**
  * Created by chenfangyi on 17-5-11.

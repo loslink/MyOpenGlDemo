@@ -1,4 +1,4 @@
-package chenfangyi.com.myopengldemo;
+package com.loslink.myopengldemo;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,11 +8,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import chenfangyi.com.myopengldemo.renderer.DemoRenderer;
-import chenfangyi.com.myopengldemo.renderer.NewRenderer;
-import chenfangyi.com.myopengldemo.utils.IConfigChangeListener;
-import chenfangyi.com.myopengldemo.view.CircleGLSurfaceView;
-import chenfangyi.com.myopengldemo.view.DemoGLSurfaceView;
+import com.loslink.myopengldemo.renderer.DemoRenderer;
+import com.loslink.myopengldemo.utils.IConfigChangeListener;
+import com.loslink.myopengldemo.view.DemoGLSurfaceView;
 
 public class ImageActivity extends AppCompatActivity {
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package chenfangyi.com.myopengldemo.utils;
+package com.loslink.myopengldemo.utils;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;

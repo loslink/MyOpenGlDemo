@@ -1,22 +1,16 @@
-package chenfangyi.com.myopengldemo.texture;
+package com.loslink.myopengldemo.texture;
 
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Rect;
-import android.graphics.RectF;
 import android.opengl.GLES20;
-import android.widget.ImageView;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
 
-import chenfangyi.com.myopengldemo.DemoApp;
-import chenfangyi.com.myopengldemo.R;
-import chenfangyi.com.myopengldemo.renderer.DemoRenderer;
-import chenfangyi.com.myopengldemo.utils.OpenGlUtils;
-import chenfangyi.com.myopengldemo.utils.Utils;
+import com.loslink.myopengldemo.DemoApp;
+import com.loslink.myopengldemo.R;
+import com.loslink.myopengldemo.utils.OpenGlUtils;
+import com.loslink.myopengldemo.utils.Utils;
 
 /**
  * Created by chenfangyi on 17-5-12.

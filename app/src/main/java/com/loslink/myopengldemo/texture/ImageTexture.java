@@ -1,4 +1,4 @@
-package chenfangyi.com.myopengldemo.texture;
+package com.loslink.myopengldemo.texture;
 
 import android.graphics.Bitmap;
 import android.graphics.Rect;
@@ -11,9 +11,9 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
-import chenfangyi.com.myopengldemo.utils.OpenGlUtils;
-import chenfangyi.com.myopengldemo.utils.Utils;
-import chenfangyi.com.myopengldemo.renderer.DemoRenderer;
+import com.loslink.myopengldemo.utils.OpenGlUtils;
+import com.loslink.myopengldemo.utils.Utils;
+import com.loslink.myopengldemo.renderer.DemoRenderer;
 
 /**
  * Created by chenfangyi on 17-5-12.

@@ -1,4 +1,4 @@
-package chenfangyi.com.myopengldemo;
+package com.loslink.myopengldemo;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

@@ -1,4 +1,4 @@
-package chenfangyi.com.myopengldemo;
+package com.loslink.myopengldemo;
 
 import android.app.Application;
 

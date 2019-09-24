@@ -6,7 +6,7 @@
  * http://www.anddev.org/android-2d-3d-graphics-opengl-tutorials-f2/possible-to-do-opengl-off-screen-rendering-in-android-t13232.html#p41662
  */
 
-package chenfangyi.com.myopengldemo.utils;
+package com.loslink.myopengldemo.utils;
 
 import android.graphics.Bitmap;
 import android.util.Log;
@@ -20,7 +20,7 @@ import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
 import javax.microedition.khronos.opengles.GL10;
 
-import chenfangyi.com.myopengldemo.renderer.AbstractBitmapRenderer;
+import com.loslink.myopengldemo.renderer.AbstractBitmapRenderer;
 
 import static javax.microedition.khronos.egl.EGL10.EGL_ALPHA_SIZE;
 import static javax.microedition.khronos.egl.EGL10.EGL_BLUE_SIZE;

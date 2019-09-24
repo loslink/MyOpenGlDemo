@@ -1,11 +1,11 @@
-package chenfangyi.com.myopengldemo;
+package com.loslink.myopengldemo;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import chenfangyi.com.myopengldemo.renderer.NewRenderer;
-import chenfangyi.com.myopengldemo.view.CircleGLSurfaceView;
+import com.loslink.myopengldemo.renderer.NewRenderer;
+import com.loslink.myopengldemo.view.CircleGLSurfaceView;
 
 public class MainActivity extends AppCompatActivity {
 

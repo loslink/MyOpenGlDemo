@@ -1,4 +1,4 @@
-package chenfangyi.com.myopengldemo.texture;
+package com.loslink.myopengldemo.texture;
 
 /**
  * Created by chenfangyi on 17-5-12.

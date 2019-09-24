@@ -1,4 +1,4 @@
-package chenfangyi.com.myopengldemo.utils;
+package com.loslink.myopengldemo.utils;
 
 import android.graphics.Rect;
 import android.graphics.RectF;
