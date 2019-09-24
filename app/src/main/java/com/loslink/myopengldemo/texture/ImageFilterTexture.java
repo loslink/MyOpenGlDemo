@@ -23,23 +23,9 @@ import com.loslink.myopengldemo.utils.Utils;
  */
 
 public class ImageFilterTexture extends ImageTexture {
-    protected static final String VERTEX_SHADER = "" +
-            "uniform mat4 uMVPMatrix;\n" +
-            "attribute vec4 position;\n" +
-            "attribute vec4 inputTextureCoordinate;\n" +
-            "attribute vec4 inputTextureCoordinate2;\n" +
-            " \n" +
-            "varying vec2 textureCoordinate;\n" +
-            "varying vec2 textureCoordinate2;\n" +
-            " \n" +
-            "void main()\n" +
-            "{\n" +
-            "    gl_Position = position * uMVPMatrix;\n" +//顶点坐标
-            "    textureCoordinate = inputTextureCoordinate.xy;\n" +//纹理坐标
-            "    textureCoordinate2 = inputTextureCoordinate2.xy;\n" +
-            "}";
-
-    public static String LOOKUP_FRAGMENT_SHADER ;
+//    protected static String VERTEX_SHADER ;
+//
+//    public static String LOOKUP_FRAGMENT_SHADER ;
 
     private int mFilterTextureCoordHandle;
     private int mFilterTextureHandle;
@@ -49,8 +35,9 @@ public class ImageFilterTexture extends ImageTexture {
     protected int mFilterTextureId = -1;
 
     public ImageFilterTexture(Context context){
-        super(VERTEX_SHADER, Utils.readTextFileFromResource(context,R.raw.lookup_fragment_shader));
-        LOOKUP_FRAGMENT_SHADER = Utils.readTextFileFromResource(context,R.raw.lookup_fragment_shader);
+        super(Utils.readTextFileFromResource(context,R.raw.imagefilter_vertex_shader), Utils.readTextFileFromResource(context,R.raw.lookup_fragment_shader));
+//        VERTEX_SHADER = Utils.readTextFileFromResource(context,R.raw.imagefilter_vertex_shader);
+//        LOOKUP_FRAGMENT_SHADER = Utils.readTextFileFromResource(context,R.raw.lookup_fragment_shader);
         mFilterTextureBuffer = ByteBuffer.allocateDirect(4 * 2 * 4)
                 .order(ByteOrder.nativeOrder())
                 .asFloatBuffer();
