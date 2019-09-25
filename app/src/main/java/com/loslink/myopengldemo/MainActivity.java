@@ -3,10 +3,6 @@ package com.loslink.myopengldemo;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.TextView;
-
-import com.loslink.myopengldemo.renderer.NewRenderer;
-import com.loslink.myopengldemo.view.CircleGLSurfaceView;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -40,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.bt_video)
     public void bt_video(){
-        Intent intent=new Intent(this,VideoPreviewCropActivity.class);
+        Intent intent=new Intent(this, VideoCropActivity.class);
         startActivity(intent);
     }
 

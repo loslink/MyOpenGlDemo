@@ -1,23 +1,15 @@
 package com.loslink.myopengldemo;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.res.AssetFileDescriptor;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateUtils;
 import android.view.Surface;
 import android.view.TextureView;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.SeekBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.loslink.myopengldemo.renderer.VideoTextureRenderer;
 
@@ -33,7 +25,7 @@ import butterknife.ButterKnife;
  * @author loslink
  * @time 2019/1/10 16:19
  */
-public class VideoPreviewCropActivity extends AppCompatActivity implements TextureView.SurfaceTextureListener {
+public class VideoCropActivity extends AppCompatActivity implements TextureView.SurfaceTextureListener {
 
     private TextureView surface;
     private MediaPlayer player;
@@ -75,7 +67,7 @@ public class VideoPreviewCropActivity extends AppCompatActivity implements Textu
         videoPath = intent.getStringExtra(VIDEO_PATH);
         cropRect = intent.getParcelableExtra(VIDEO_CROP_RECT);
         outputPath = intent.getStringExtra(VIDEO_OUT_PATH);
-        cropRect=new RectF(0,0,720,1280);
+        cropRect=new RectF(0,0,720,720);
     }
 
 
@@ -186,7 +178,7 @@ public class VideoPreviewCropActivity extends AppCompatActivity implements Textu
                 //SurfaceTexture可以获得没处理过的中间视频帧
                 player.setSurface(new Surface(renderer.getVideoTexture()));//该Surface用来OpenGL获取视频帧
                 startPlay();
-                VideoPreviewCropActivity.this.runOnUiThread(new Runnable() {
+                VideoCropActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         String allTimeStr=DateUtils.formatElapsedTime(player.getDuration() / 1000);
@@ -197,7 +189,7 @@ public class VideoPreviewCropActivity extends AppCompatActivity implements Textu
                 mTimerTask = new TimerTask() {
                     @Override
                     public void run() {
-                        VideoPreviewCropActivity.this.runOnUiThread(new Runnable() {
+                        VideoCropActivity.this.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 try {

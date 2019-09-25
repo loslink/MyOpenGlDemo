@@ -27,7 +27,7 @@
         <activity android:name=".ImageFilterActivity" >
         </activity>
         <activity android:name=".CircleActivity" />
-        <activity android:name=".VideoPreviewCropActivity" />
+        <activity android:name=".VideoCropActivity" />
     </application>
 
 </manifest>

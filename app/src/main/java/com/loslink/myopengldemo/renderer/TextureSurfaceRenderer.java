@@ -11,6 +11,7 @@ import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
 
 /**
+ * 模拟GLSurfaceView.Renderer渲染器步骤
  * Renderer which initializes OpenGL 2.0 context on a passed surface and starts a rendering thread
  *
  * This class has to be subclassed to be used properly
@@ -61,7 +62,7 @@ public abstract class TextureSurfaceRenderer implements Runnable
             long loopStart = System.currentTimeMillis();
             pingFps();
 
-            if (draw())
+            if (draw())//通过具柄传递新值，gl绘制
             {
                 egl.eglSwapBuffers(eglDisplay, eglSurface);//双缓冲机制，交换缓冲区，交换显存(将surface显存和显示器的显存交换)
             }
@@ -87,6 +88,7 @@ public abstract class TextureSurfaceRenderer implements Runnable
     /**
      * Main draw function, subclass this and add custom drawing code here. The rendering thread will attempt to limit
      * FPS to 60 to keep CPU usage low.
+     * 通过具柄传递新值，gl绘制
      */
     protected abstract boolean draw();
 
