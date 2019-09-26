@@ -7,9 +7,10 @@ import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.util.Log;
+import android.widget.ImageView;
 
 import com.loslink.myopengldemo.renderer.VideoTextureRenderer2;
-import com.loslink.myopengldemo.utils.OpenGlUtils;
+import com.loslink.myopengldemo.utils.Utils;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -27,10 +28,10 @@ public class VideoTexture implements SurfaceTexture.OnFrameAvailableListener {
 
     private static float squareSize = 1.0f;
     //surface顶点 ，顶点数组
-    private float squareCoords[] = {-squareSize, squareSize, 0.0f,   // top left
-            -squareSize, -squareSize, 0.0f,   // bottom left
-            squareSize, -squareSize, 0.0f,   // bottom right
-            squareSize, squareSize, 0.0f}; // top right
+//    private float vertexCoords[] = {-squareSize, squareSize, 0.0f,   // top left
+//            -squareSize, -squareSize, 0.0f,   // bottom left
+//            squareSize, -squareSize, 0.0f,   // bottom right
+//            squareSize, squareSize, 0.0f}; // top right
 
     private static short drawOrder[] = {0, 1, 2, 0, 2, 3};
 
@@ -39,10 +40,10 @@ public class VideoTexture implements SurfaceTexture.OnFrameAvailableListener {
     // Texture to be shown in backgrund
     private FloatBuffer textureBuffer;
     //纹理数组（图片）
-    private float textureCoords[] = {0.0f, 1.0f, 0.0f, 1.0f,
-            0.0f, 0.0f, 0.0f, 1.0f,
-            1.0f, 0.0f, 0.0f, 1.0f,
-            1.0f, 1.0f, 0.0f, 1.0f};
+//    private float textureCoords[] = {0.0f, 1.0f, 0.0f, 1.0f,
+//            0.0f, 0.0f, 0.0f, 1.0f,
+//            1.0f, 0.0f, 0.0f, 1.0f,
+//            1.0f, 1.0f, 0.0f, 1.0f};
     private int[] textures = new int[1];
 
     private int vertexShaderHandle;
@@ -63,6 +64,16 @@ public class VideoTexture implements SurfaceTexture.OnFrameAvailableListener {
     protected int width;
     protected int height;
 
+    //支持Fitcenter 和 centerCrop 还有 CENTER_INSIDE
+    protected ImageView.ScaleType mScaleType = ImageView.ScaleType.FIT_CENTER;
+    protected boolean mFlipV = false;//上下翻转
+    protected boolean mFilpH = false;//左右翻转
+    protected int mRotation = 0;//旋转
+    protected RectF mShowRectF;
+    protected static final Utils.VERTEX_MODE mMode = Utils.VERTEX_MODE.DCAB;
+    public static final float vertexCoords[] = Utils.getVertexCoord(mMode);//根据不同顶点顺序获取顶点坐标数组
+    protected static final float textureCoords[] = Utils.getTextureCoord(false, false, 0, mMode);
+
     public VideoTexture(){
     }
 
@@ -70,6 +81,7 @@ public class VideoTexture implements SurfaceTexture.OnFrameAvailableListener {
         vertexShaderCode = vertexShader;
         fragmentShaderCode = fragmentShader;
         videoTextureTransform = new float[16];
+        mShowRectF = new RectF();
         this.width=width;
         this.height=height;
     }
@@ -100,8 +112,88 @@ public class VideoTexture implements SurfaceTexture.OnFrameAvailableListener {
             String error = GLES20.glGetProgramInfoLog(shaderProgram);
             Log.e("SurfaceTest", "Error while linking program:\n" + error);
         }
-
+        setupTexture();
+        setupVertexBuffer();
     }
+
+    /**
+     * 从新计算顶点缓冲区，供新变换使用
+     * 通过更改顶点坐标实现
+     */
+    public void recountVertexBuffer(){
+        int rotationTW = videoWidth;
+        int rotationTH = videoHeight;
+        if(mRotation == 90 || mRotation == 270){//这个旋转角度导致宽高调转
+            int cache = rotationTW;
+            rotationTW = rotationTH;
+            rotationTH = cache;
+        }
+
+        float vertex[];
+        if(mScaleType == ImageView.ScaleType.CENTER_CROP) {
+            float textureRatio = 1.0f * rotationTW / rotationTH;
+            float displayRatio = 1.0f * width / height;
+            float newWidth;
+            float newHeight;
+            if (textureRatio >= displayRatio){//texture按照比例缩放后高会和display一样大
+                newHeight = height;
+                newWidth = 1.0f * height * rotationTW / rotationTH;
+            } else{
+                newWidth = width;
+                newHeight = 1.0f * width * rotationTH / rotationTW;
+            }
+            float dx = (width - newWidth) / 2;
+            float dy = (height - newHeight) / 2;
+            mShowRectF.set(dx, dy, newWidth + dx, newHeight + dy);
+            vertex = Utils.getStandardVertex(mShowRectF, width, height, mMode);//mShowRectF为把图片按照比例缩放后的显示框，一般会超出屏幕
+        } else if (mScaleType == ImageView.ScaleType.CENTER_INSIDE){//如果原图小不会进行拉伸
+            float newWidth = rotationTW;
+            float newHeight = rotationTH;
+            if(rotationTW > width){
+                newWidth = width;
+                newHeight = 1.0f * width * rotationTH / rotationTW;
+                if(newHeight > height){//防止都大于的情况下要缩小到都小于或者等于
+                    newHeight = height;
+                    newWidth = 1.0f * height * rotationTW / rotationTH;
+                }
+            } else if(rotationTH > height){
+                newHeight = height;
+                newWidth = 1.0f * height * rotationTW / rotationTH;
+            }
+            float dx = (width - newWidth) / 2;
+            float dy = (height - newHeight) / 2;
+            mShowRectF.set(dx, dy, newWidth + dx, newHeight + dy);
+            vertex = Utils.getStandardVertex(mShowRectF, width, height, mMode);
+        } else{
+            float textureRatio = 1.0f * rotationTW / rotationTH;
+            float displayRatio = 1.0f * width / height;
+            float newWidth;
+            float newHeight;
+            if (textureRatio >= displayRatio){//texture按照比例缩放后宽会和display一样大
+                newWidth = width;
+                newHeight = 1.0f * width * rotationTH / rotationTW;
+            } else{
+                newHeight = height;
+                newWidth = 1.0f * height * rotationTW / rotationTH;
+            }
+            float dx = (width - newWidth) / 2;
+            float dy = (height - newHeight) / 2;
+            mShowRectF.set(dx, dy, newWidth + dx, newHeight + dy);
+            vertex = Utils.getStandardVertex(mShowRectF, width, height, mMode);
+        }
+
+        System.arraycopy(vertex, 0, vertexCoords, 0, vertexCoords.length);//更新全局顶点坐标属性
+        vertexBuffer.clear();
+        vertexBuffer.put(vertex);//更新顶点缓冲区（顶点坐标只处理裁剪区域计算）
+        vertexBuffer.position(0);
+
+        float textureCoord[] = Utils.getTextureCoord(mFilpH, mFlipV, mRotation, mMode);//翻转和旋转只在纹理上处理
+        System.arraycopy(textureCoord, 0, textureCoords, 0, textureCoords.length);
+        textureBuffer.clear();
+        textureBuffer.put(textureCoord);
+        textureBuffer.position(0);
+    }
+
 
 
     //创建缓冲区，并往缓冲区填充数据，供具柄使用（可以动态传递）
@@ -114,17 +206,17 @@ public class VideoTexture implements SurfaceTexture.OnFrameAvailableListener {
         drawListBuffer.position(0);
 
         // Initialize the texture holder
-        ByteBuffer bb = ByteBuffer.allocateDirect(squareCoords.length * 4);
+        ByteBuffer bb = ByteBuffer.allocateDirect(vertexCoords.length * 4);
         bb.order(ByteOrder.nativeOrder());
 
         //顶点缓冲区
         vertexBuffer = bb.asFloatBuffer();
-        vertexBuffer.put(squareCoords);
+        vertexBuffer.put(vertexCoords);
         vertexBuffer.position(0);
     }
 
 
-    private void setupTexture(Context context) {
+    private void setupTexture() {
 
         ByteBuffer texturebb = ByteBuffer.allocateDirect(textureCoords.length * 4);
         texturebb.order(ByteOrder.nativeOrder());
@@ -192,40 +284,40 @@ public class VideoTexture implements SurfaceTexture.OnFrameAvailableListener {
         if(cropAspect > surfaceAspect){//高度填满surface
             realVideoH=height;
             realVideoW=realVideoH/cropAspect;
-            topLeftSurfaceY=squareCoords[1];
-            topRightSurfaceY=squareCoords[10];
-            bottomLeftSurfaceY=squareCoords[4];
-            bottomRightSurfaceY=squareCoords[7];
+            topLeftSurfaceY= vertexCoords[1];
+            topRightSurfaceY= vertexCoords[10];
+            bottomLeftSurfaceY= vertexCoords[4];
+            bottomRightSurfaceY= vertexCoords[7];
 
             scale=realVideoW/width;
-            topLeftSurfaceX=squareCoords[0]*scale;
-            topRightSurfaceX=squareCoords[9]*scale;
-            bottomLeftSurfaceX=squareCoords[3]*scale;
-            bottomRightSurfaceX=squareCoords[6]*scale;
+            topLeftSurfaceX= vertexCoords[0]*scale;
+            topRightSurfaceX= vertexCoords[9]*scale;
+            bottomLeftSurfaceX= vertexCoords[3]*scale;
+            bottomRightSurfaceX= vertexCoords[6]*scale;
         }else{//宽度填满surface
             realVideoW=width;
             realVideoH=realVideoW*cropAspect;
-            topLeftSurfaceX=squareCoords[0];
-            topRightSurfaceX=squareCoords[9];
-            bottomLeftSurfaceX=squareCoords[3];
-            bottomRightSurfaceX=squareCoords[6];
+            topLeftSurfaceX= vertexCoords[0];
+            topRightSurfaceX= vertexCoords[9];
+            bottomLeftSurfaceX= vertexCoords[3];
+            bottomRightSurfaceX= vertexCoords[6];
 
             scale=realVideoH/height;
-            topLeftSurfaceY=squareCoords[1]*scale;
-            topRightSurfaceY=squareCoords[10]*scale;
-            bottomLeftSurfaceY=squareCoords[4]*scale;
-            bottomRightSurfaceY=squareCoords[7]*scale;
+            topLeftSurfaceY= vertexCoords[1]*scale;
+            topRightSurfaceY= vertexCoords[10]*scale;
+            bottomLeftSurfaceY= vertexCoords[4]*scale;
+            bottomRightSurfaceY= vertexCoords[7]*scale;
 
         }
 
-        squareCoords[0]=topLeftSurfaceX;
-        squareCoords[1]=topLeftSurfaceY;
-        squareCoords[3]=bottomLeftSurfaceX;
-        squareCoords[4]=bottomLeftSurfaceY;
-        squareCoords[6]=bottomRightSurfaceX;
-        squareCoords[7]=bottomRightSurfaceY;
-        squareCoords[9]=topRightSurfaceX;
-        squareCoords[10]=topRightSurfaceY;
+        vertexCoords[0]=topLeftSurfaceX;
+        vertexCoords[1]=topLeftSurfaceY;
+        vertexCoords[3]=bottomLeftSurfaceX;
+        vertexCoords[4]=bottomLeftSurfaceY;
+        vertexCoords[6]=bottomRightSurfaceX;
+        vertexCoords[7]=bottomRightSurfaceY;
+        vertexCoords[9]=topRightSurfaceX;
+        vertexCoords[10]=topRightSurfaceY;
 
     }
 
@@ -234,6 +326,7 @@ public class VideoTexture implements SurfaceTexture.OnFrameAvailableListener {
      * @return
      */
     public boolean draw() {
+        recountVertexBuffer();
         synchronized (this) {
             if (frameAvailable) {
                 /*
@@ -273,7 +366,7 @@ public class VideoTexture implements SurfaceTexture.OnFrameAvailableListener {
 
         GLES20.glEnableVertexAttribArray(positionHandle);//启动顶点数组具柄
         //把缓冲区传递进该具柄(size:数组中每3个元素为一个顶点，stride:4 * 3即FLOAT字节大小*3个元素为一个顶点)
-        GLES20.glVertexAttribPointer(positionHandle, 3, GLES20.GL_FLOAT, false, 4 * 3, vertexBuffer);
+        GLES20.glVertexAttribPointer(positionHandle, 2, GLES20.GL_FLOAT, false, 4 * 2, vertexBuffer);
 
         GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, textures[0]);//绑定0号纹理
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);//激活0号纹理
@@ -281,12 +374,13 @@ public class VideoTexture implements SurfaceTexture.OnFrameAvailableListener {
 
         GLES20.glEnableVertexAttribArray(textureCoordinateHandle);//启动纹理坐标具柄
         //传递纹理坐标进纹理具柄
-        GLES20.glVertexAttribPointer(textureCoordinateHandle, 4, GLES20.GL_FLOAT, false, 0, textureBuffer);
+        GLES20.glVertexAttribPointer(textureCoordinateHandle, 2, GLES20.GL_FLOAT, false, 2 * 4, textureBuffer);
 
         //传递纹理矩阵进去
         GLES20.glUniformMatrix4fv(textureTranformHandle, 1, false, videoTextureTransform, 0);
 
-        GLES20.glDrawElements(GLES20.GL_TRIANGLES, drawOrder.length, GLES20.GL_UNSIGNED_SHORT, drawListBuffer);
+//        GLES20.glDrawElements(GLES20.GL_TRIANGLES, drawOrder.length, GLES20.GL_UNSIGNED_SHORT, drawListBuffer);
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);//真正绘画，count：顶点数量四个顶点
         GLES20.glDisableVertexAttribArray(positionHandle);
         GLES20.glDisableVertexAttribArray(textureCoordinateHandle);
 
@@ -309,9 +403,9 @@ public class VideoTexture implements SurfaceTexture.OnFrameAvailableListener {
 
 
     public void initGLComponents() {
-        ajustVideo();
+//        ajustVideo();
         setupVertexBuffer();
-        setupTexture(ctx);
+        setupTexture();
         loadShaders();
     }
 
