@@ -28,6 +28,7 @@
         </activity>
         <activity android:name=".CircleActivity" />
         <activity android:name=".VideoCropActivity" />
+        <activity android:name=".VideoActivity" />
     </application>
 
 </manifest>
