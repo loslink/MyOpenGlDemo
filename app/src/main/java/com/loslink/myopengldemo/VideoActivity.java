@@ -11,11 +11,9 @@ import android.text.format.DateUtils;
 import android.view.Surface;
 import android.view.TextureView;
 
-import com.loslink.myopengldemo.renderer.VideoTextureRenderer;
+import com.loslink.myopengldemo.renderer.VideoTextureRenderer2;
 
 import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.ButterKnife;
 
@@ -27,10 +25,10 @@ import butterknife.ButterKnife;
  */
 public class VideoActivity extends AppCompatActivity implements TextureView.SurfaceTextureListener {
 
-    private TextureView surface;
+    private TextureView textureView;
     private MediaPlayer player;
 
-    private VideoTextureRenderer renderer;
+    private VideoTextureRenderer2 renderer;
     public static final String VIDEO_PATH = "VIDEO_PATH";
     public static final String VIDEO_CROP_RECT = "VIDEO_CROP_RECT";
 
@@ -50,9 +48,9 @@ public class VideoActivity extends AppCompatActivity implements TextureView.Surf
 
 
     protected void initView() {
-        surface = findViewById(R.id.surface);
+        textureView = findViewById(R.id.surface);
 
-        surface.setSurfaceTextureListener(this);
+        textureView.setSurfaceTextureListener(this);
     }
 
 
@@ -107,7 +105,7 @@ public class VideoActivity extends AppCompatActivity implements TextureView.Surf
     @Override
     protected void onResume() {
         super.onResume();
-        if (surface.isAvailable()) {
+        if (textureView.isAvailable()) {
             startPlaying();
         }
         try {
@@ -148,17 +146,17 @@ public class VideoActivity extends AppCompatActivity implements TextureView.Surf
     private void startPlaying() {
 
         //该TextureView用来显示视频帧
-        renderer = new VideoTextureRenderer(this, surface.getSurfaceTexture(), surfaceWidth, surfaceHeight);
+        renderer = new VideoTextureRenderer2(this, textureView.getSurfaceTexture(), surfaceWidth, surfaceHeight);
         renderer.setCropRect(cropRect);
         renderer.setVideoSize(player.getVideoWidth(), player.getVideoHeight());
-        renderer.setOnStateListner(new VideoTextureRenderer.OnStateListner() {
+        renderer.setOnStateListner(new VideoTextureRenderer2.OnStateListner() {
             @Override
             public void onTextureInitSuccess() {
-                if (renderer.getVideoTexture() == null) {
+                if (renderer.getVideoSurfaceTexture() == null) {
                     return;
                 }
                 //SurfaceTexture可以获得没处理过的中间视频帧
-                player.setSurface(new Surface(renderer.getVideoTexture()));//该Surface用来OpenGL获取视频帧
+                player.setSurface(new Surface(renderer.getVideoSurfaceTexture()));//该SurfaceTexture用来OpenGL获取视频帧
                 startPlay();
                 VideoActivity.this.runOnUiThread(new Runnable() {
                     @Override
