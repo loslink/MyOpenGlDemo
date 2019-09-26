@@ -40,4 +40,9 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    @OnClick(R.id.bt_video2)
+    public void bt_video2(){
+        Intent intent=new Intent(this, VideoActivity.class);
+        startActivity(intent);
+    }
 }
